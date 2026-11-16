@@ -1,0 +1,34 @@
+@startuml
+title Диаграмма состояний модели банкомата
+
+state "Ожидание карточки" as WaitCard
+state "Ожидание ввода ПИН-кода" as WaitPin
+state "Проверка ПИН-кода" as CheckPin
+state "Ожидание выбора клиента" as WaitChoice
+state "Обработка запроса на снятие наличных" as ProcessCash
+state "Обработка запроса на получение справки" as ProcessInfo
+state "Выдача наличных" as GiveCash
+state "Печать" as Print
+state "Возврат карточки" as ReturnCard
+state "Завершение транзакции" as EndTransaction
+
+[*] --> WaitCard
+WaitCard --> WaitPin : карточка вставлена
+WaitPin --> CheckPin : ПИН-код введен
+WaitPin --> ReturnCard : отмена транзакции
+CheckPin --> WaitChoice : [ПИН-код верный]
+CheckPin --> WaitPin : [ПИН-код неверный]
+CheckPin --> EndTransaction : три неудачи / конфискация карточки
+WaitChoice --> ProcessCash : выбор суммы [сумма введена]
+WaitChoice --> ProcessInfo : выбор справки
+WaitChoice --> ReturnCard : отмена транзакции
+ProcessCash --> GiveCash : [кредит не превышен]
+ProcessCash --> ReturnCard : сообщение [кредит превышен]
+GiveCash --> Print : наличные выданы [выбрана печать чека]
+GiveCash --> ReturnCard : наличные выданы [печать чека не выбрана]
+ProcessInfo --> Print : справка сформирована
+Print --> ReturnCard : печать закончена
+ReturnCard --> EndTransaction : карточка возвращена
+EndTransaction --> WaitCard : транзакция завершена
+WaitCard --> [*]
+@enduml
