@@ -1,0 +1,21 @@
+@startuml
+title Диаграмма компонентов модели банкомата
+
+component "MainATM.exe" <<EXE>> as MainATM
+component "MainBank" <<Main Program>> as MainBank
+component "Устройство Банкомата" <<Task Specification>> as Device
+
+component "Устройство чтения карточки" <<Task Body>> as Reader
+component "Клавиатура Банкомата" <<Task Body>> as Keyboard
+component "Принтер Банкомата" <<Task Body>> as Printer
+component "Экран Банкомата" <<Task Body>> as Screen
+component "Устройство выдачи наличных" <<Task Body>> as Dispenser
+
+MainATM ..> MainBank
+MainATM ..> Device
+Reader ..> Device
+Keyboard ..> Device
+Printer ..> Device
+Screen ..> Device
+Dispenser ..> Device
+@enduml
