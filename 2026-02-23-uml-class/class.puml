@@ -1,0 +1,59 @@
+@startuml
+title Диаграмма классов модели банкомата
+skinparam classAttributeIconSize 0
+
+interface "Контроллер" as Controller
+interface "Контроллер Банкомата" as ATMController
+Controller <|-- ATMController
+
+class "Транзакция Банкомата" as Transaction {
+  + идентификатор карточки : Integer
+  + значение ПИН-кода карточки : Integer
+  + введенный ПИН-код : Integer
+  + введенная сумма наличных : Currency
+  + создать новую транзакцию()
+  + проверить правильность ПИН-кода() : Boolean
+  + завершить транзакцию()
+}
+
+class "Контроллер Банка" as BankController {
+  + проверить идентификатор карточки(идентификатор карточки : Integer) : Boolean
+  + открыть счет клиента(идентификатор карточки : Integer)
+  + проверить баланс клиента(идентификатор карточки : Integer, введенная сумма наличных : Currency) : Boolean
+  + уменьшить счет клиента(идентификатор карточки : Integer, введенная сумма наличных : Currency) : Boolean
+}
+
+class "Устройство чтения карточки" as CardReader {
+  + прочитать идентификатор карточки() : Integer
+  + прочитать ПИН-код() : Integer
+  + вернуть кредитную карточку()
+  + блокировать кредитную карточку()
+}
+
+class "Экран Банкомата" as Screen {
+  + показать меню опций()
+  + показать меню снятия суммы()
+}
+
+class "Клавиатура Банкомата" as Keyboard {
+  + ввести ПИН-код() : Integer
+  + ввести тип транзакции() : Boolean
+  + ввести сумму снятия наличных() : Currency
+}
+
+class "Устройство выдачи наличных" as CashDispenser {
+  + выдать наличные()
+}
+
+class "Принтер Банкомата" as Printer {
+  + распечатать чек()
+}
+
+ATMController "1" --> "1" CardReader
+ATMController "1" --> "1" Printer
+ATMController "1" --> "1" Keyboard
+ATMController "1" --> "1" CashDispenser
+ATMController "1" --> "1" Screen
+ATMController "0..n" --> "1" BankController
+ATMController "1" o-- "1..n" Transaction
+@enduml
