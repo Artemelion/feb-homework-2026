@@ -1,0 +1,31 @@
+@startuml
+title Диаграмма последовательности: снятие наличных
+
+actor "Клиент Банкомата" as Client
+participant "Устройство чтения\nкарточки" as Reader
+participant "Контроллер\nБанкомата" as Controller
+participant "Транзакция\nБанкомата" as Transaction
+participant "Клавиатура\nБанкомата" as Keyboard
+participant "Экран\nБанкомата" as Screen
+participant "Принтер\nБанкомата" as Printer
+participant "Устройство\nвыдачи наличных" as Dispenser
+participant "Интерфейс\nБанка" as Bank
+
+Client -> Reader : прочитать идентификатор карточки()
+Controller -> Bank : проверить идентификатор карточки(Integer)
+Client -> Keyboard : ввести ПИН-код()
+Controller -> Reader : прочитать ПИН-код()
+Controller -> Transaction : создать новую транзакцию()
+Controller -> Transaction : проверить правильность ПИН-кода()
+Controller -> Screen : показать меню опций()
+Client -> Keyboard : ввести тип транзакции()
+Controller -> Screen : показать меню снятия суммы()
+Client -> Keyboard : ввести сумму снятия наличных()
+Controller -> Bank : открыть счет клиента(Integer)
+Controller -> Bank : проверить баланс клиента(Integer, Currency)
+Controller -> Bank : уменьшить счет клиента(Integer, Currency)
+Controller -> Printer : распечатать чек()
+Controller -> Reader : вернуть кредитную карточку()
+Controller -> Dispenser : выдать наличные()
+Controller -> Transaction : завершить транзакцию()
+@enduml
