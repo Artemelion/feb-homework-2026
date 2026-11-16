@@ -1,0 +1,25 @@
+@startuml
+title Система аренды автомобилей - диаграмма компонентов
+
+component "Веб-сайт\n(клиентская часть)" as Web
+component "Панель менеджера" as Admin
+component "Сервер приложения" as Server {
+  component "Модуль бронирования" as BookingModule
+  component "Модуль договоров" as ContractModule
+  component "Модуль автопарка" as FleetModule
+  component "Модуль платежей" as PaymentModule
+}
+database "База данных" as DB
+component "Платёжный шлюз" <<external>> as Gateway
+
+interface "REST API" as API
+
+Web ..> API
+Admin ..> API
+API - Server
+BookingModule ..> FleetModule
+BookingModule ..> ContractModule
+ContractModule ..> PaymentModule
+PaymentModule ..> Gateway
+Server ..> DB
+@enduml

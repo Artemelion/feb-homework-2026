@@ -1,0 +1,18 @@
+@startuml
+title Система аренды автомобилей - диаграмма кооперации (бронирование)
+allowmixing
+left to right direction
+
+actor "Клиент" as Client
+object ":Сайт" as Site
+object ":Сервис аренды" as Service
+object ":Автомобиль" as Car
+object ":Договор аренды" as Contract
+object ":Платёжная система" as Payment
+
+Client -- Site : "1: выбрать даты →\n4: выбрать автомобиль →\n8: оплатить →"
+Site -- Service : "2: найти свободные(с, по) →\n5: забронировать(авто) →\n10: подтвердить(договор) →"
+Service -- Car : "3: свободен(с, по) →\n11: статус = ЗАБРОНИРОВАН →"
+Service -- Contract : "6: создать договор() →\n7: рассчитать сумму() →"
+Site -- Payment : "9: провести платёж(сумма) →"
+@enduml

@@ -1,0 +1,32 @@
+@startuml
+title Система аренды автомобилей - диаграмма последовательности (бронирование и оплата)
+
+actor "Клиент" as Client
+participant ":Сайт" as Site
+participant ":Сервис аренды" as Service
+participant ":Автомобиль" as Car
+participant ":Договор аренды" as Contract
+participant ":Платёжная система" as Payment
+
+Client -> Site : выбрать даты и класс авто
+Site -> Service : найти свободные(с, по)
+Service -> Car : свободен(с, по)
+Car --> Service : true
+Service --> Site : список автомобилей
+Client -> Site : выбрать автомобиль
+Site -> Service : забронировать(клиент, авто, с, по)
+Service -> Contract : создать договор()
+Contract -> Contract : рассчитать сумму()
+Service --> Site : договор, сумма
+Client -> Site : оплатить
+Site -> Payment : провести платёж(сумма)
+alt оплата прошла
+  Payment --> Site : OK
+  Site -> Service : подтвердить(договор)
+  Service -> Car : статус = ЗАБРОНИРОВАН
+  Site --> Client : бронь подтверждена
+else ошибка оплаты
+  Payment --> Site : ошибка
+  Site --> Client : оплата не прошла
+end
+@enduml

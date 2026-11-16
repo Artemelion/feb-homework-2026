@@ -1,0 +1,73 @@
+@startuml
+title Система аренды автомобилей - диаграмма классов
+skinparam classAttributeIconSize 0
+
+abstract class "Пользователь" as User {
+  # id : Integer
+  # имя : String
+  # телефон : String
+  + войти() : Boolean
+}
+
+class "Клиент" as Client {
+  - номер прав : String
+  - email : String
+  + забронировать(авто : Автомобиль, с : Date, по : Date) : Бронь
+}
+
+class "Менеджер" as Manager {
+  + оформить договор(бронь : Бронь) : Договор
+  + принять автомобиль(договор : Договор)
+}
+
+class "Автомобиль" as Car {
+  - номер : String
+  - марка : String
+  - модель : String
+  - цена за день : Currency
+  - статус : СтатусАвто
+  + свободен(с : Date, по : Date) : Boolean
+}
+
+enum "СтатусАвто" as CarStatus {
+  СВОБОДЕН
+  ЗАБРОНИРОВАН
+  В_АРЕНДЕ
+  НА_РЕМОНТЕ
+}
+
+class "Бронь" as Booking {
+  - дата начала : Date
+  - дата окончания : Date
+  + отменить()
+}
+
+class "Договор аренды" as Contract {
+  - номер : Integer
+  - сумма : Currency
+  - статус : String
+  + рассчитать сумму() : Currency
+  + закрыть()
+}
+
+class "Платёж" as Payment {
+  - сумма : Currency
+  - дата : Date
+  + провести() : Boolean
+}
+
+class "Повреждение" as Damage {
+  - описание : String
+  - стоимость ремонта : Currency
+}
+
+User <|-- Client
+User <|-- Manager
+Car --> CarStatus
+Client "1" -- "0..*" Booking
+Booking "0..*" -- "1" Car
+Booking "1" -- "0..1" Contract
+Manager "1" -- "0..*" Contract
+Contract "1" *-- "1..*" Payment
+Contract "1" o-- "0..*" Damage
+@enduml
