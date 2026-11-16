@@ -1,0 +1,25 @@
+@startuml
+title Диаграмма кооперации: снятие наличных
+allowmixing
+left to right direction
+
+actor "Клиент Банкомата" as Client
+object ":Устройство чтения карточки" as Reader
+object ":Контроллер Банкомата" as Controller
+object ":Транзакция Банкомата" as Transaction
+object ":Клавиатура Банкомата" as Keyboard
+object ":Экран Банкомата" as Screen
+object ":Принтер Банкомата" as Printer
+object ":Устройство выдачи наличных" as Dispenser
+object ":Интерфейс Банка" as Bank
+
+Client -- Reader : "1: прочитать идентификатор карточки() →"
+Client -- Keyboard : "3: ввести ПИН-код() →\n8: ввести тип транзакции() →\n10: ввести сумму снятия наличных() →"
+Controller -- Reader : "4: прочитать ПИН-код() →\n15: вернуть кредитную карточку() →"
+Controller -- Transaction : "5: создать новую транзакцию() →\n6: проверить правильность ПИН-кода() →\n17: завершить транзакцию() →"
+Controller -- Keyboard
+Controller -- Screen : "7: показать меню опций() →\n9: показать меню снятия суммы() →"
+Controller -- Printer : "14: распечатать чек() →"
+Controller -- Dispenser : "16: выдать наличные() →"
+Controller -- Bank : "2: проверить идентификатор карточки(Integer) →\n11: открыть счет клиента(Integer) →\n12: проверить баланс клиента(Integer, Currency) →\n13: уменьшить счет клиента(Integer, Currency) →"
+@enduml
